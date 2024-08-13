@@ -1,0 +1,9 @@
+{
+    "name": "kenpachi/test-work",
+    "autoload": {
+        "psr-4": {
+            "Kenpachi\\TestWork\\": "src/"
+        }
+    },
+    "require": {}
+}
