@@ -6,11 +6,11 @@ use Kenpachi\TestWork\Model\User;
 
 class RegisterController extends BaseController
 {
-    protected $template = '/views/home/';
+    protected $template = '/views/register/';
 
     public function index()
     {
-        return $this->render('index', ['x' => 10]);
+        return $this->render('index');
     }
 
     public function store()
@@ -20,9 +20,12 @@ class RegisterController extends BaseController
         $user->username = $request['username'];
         $user->email = $request['email'];
         $user->phone = $request['phone'];
-        $user->password = $request['username'];
-        $user->save();
+        $user->setPassword($request['password']);
 
-        header('Location: /register');
+        if ($user->save()) {
+            header('Location: /register');
+        }
+
+        return $this->render('index');
     }
 }

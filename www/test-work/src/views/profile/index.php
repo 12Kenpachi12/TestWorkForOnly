@@ -1,18 +1,24 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Профиль пользователя</title>
-</head>
-<body>
-    <div class="profile-container">
-        <h2>Профиль пользователя</h2>
-        <p><strong>Логин:</strong> ИмяПользователя</p>
-        <p><strong>Email:</strong> email@example.com</p>
-        <p><strong>Телефон:</strong> +1234567890</p>
-        <a href="logout.html">Выйти</a>
-    </div>
-</body>
-</html>
+<?php
+
+use Kenpachi\TestWork\Model\User;
+
+/**
+ * @var User $user
+ */
+
+$title = 'Вход';
+?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/layouts/header.php' ?>
+
+<div class="profile-container">
+    <h2>Профиль пользователя</h2>
+    <p><strong>Логин:</strong> <?= $user->username ?></p>
+    <p><strong>Email:</strong> <?= $user->email ?></p>
+    <p><strong>Телефон:</strong> <?= $user->phone ?></p>
+    <a href="/logout">Выйти</a>
+    <a href="/profile/edit">Редактировать</a>
+    <a href="/profile/password">Сменить пароль</a>
+</div>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/views/layouts/header.php' ?>

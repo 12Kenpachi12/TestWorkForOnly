@@ -2,6 +2,8 @@
 
 namespace Kenpachi\TestWork\Controller;
 
+use Kenpachi\TestWork\Component\User;
+
 class HomeController extends BaseController
 {
     protected $template = '/views/home/';
@@ -9,5 +11,11 @@ class HomeController extends BaseController
     public function index()
     {
         return $this->render('index', ['x' => 10]);
+    }
+
+    public function logout()
+    {
+        User::logout();
+        header('Location: /login');
     }
 }
