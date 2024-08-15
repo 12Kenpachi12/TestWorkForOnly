@@ -4,6 +4,7 @@ namespace Kenpachi\TestWork\Controller;
 
 use Kenpachi\TestWork\Component\User as ComponentUser;
 use Kenpachi\TestWork\Model\User;
+use Kenpachi\TestWork\Validator\LoginValidator;
 
 class LoginController extends BaseController
 {
@@ -24,15 +25,21 @@ class LoginController extends BaseController
             return header('Location: /');
         }
 
-        $user = User::findByEmailOrPhone($_POST['login']);
+        $validator = new LoginValidator();
 
-        if (!$user
-            || !password_verify($_POST['password'], $user['password'])
-            || !ComponentUser::login($user['id'])
-        ) {
-            return $this->render('index', ['error' => 'Неверный логин или пароль']);
+        if ($validator->validate($_POST)) {
+            $user = User::findByEmailOrPhone($_POST['login']);
+
+            if ($user
+                && password_verify($_POST['password'], $user['password'])
+                && ComponentUser::login($user['id'])
+            ) {
+                return header('Location: /');
+            } else {
+                return $this->render('index', ['error' => 'Неверный логин или пароль']);
+            }
         }
 
-        return header('Location: /');
+        return $this->render('index', ['errors' => $validator->errors]);
     }
 }

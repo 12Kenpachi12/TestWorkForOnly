@@ -4,6 +4,7 @@ namespace Kenpachi\TestWork\Controller;
 
 use Kenpachi\TestWork\Component\User as ComponentUser;
 use Kenpachi\TestWork\Model\User;
+use Kenpachi\TestWork\Validator\EditProfileValidator;
 
 class ProfileController extends BaseController
 {
@@ -34,16 +35,27 @@ class ProfileController extends BaseController
     public function update()
     {
         $request = $_POST;
-        $user = ComponentUser::getIdentity();
-        $user->username = $request['username'];
-        $user->email = $request['email'];
-        $user->phone = $request['phone'];
 
-        if ($user->save()) {
-            header('Location: /profile');
+        $user = ComponentUser::getIdentity();
+
+        if (!$user) {
+            header('Location: /login');
         }
 
-        return $this->render('edit', ['user' => $user]);
+        $validator = new EditProfileValidator();
+        $validator->user = $user;
+
+        if ($validator->validate($request)) {
+            $user->username = $request['username'];
+            $user->email = $request['email'];
+            $user->phone = $request['phone'];
+
+            if ($user->save()) {
+                header('Location: /profile');
+            }
+        }
+
+        return $this->render('edit', ['user' => $user, 'errors' => $validator->errors]);
     }
 
     public function password()

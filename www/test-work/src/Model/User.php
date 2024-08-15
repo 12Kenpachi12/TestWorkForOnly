@@ -6,24 +6,17 @@ use Kenpachi\TestWork\Component\Database;
 use PDO;
 
 /**
- * @property \PDO $conn
+ * @property \PDO $db
  */
-class User
+class User extends AbstractModel
 {
-    public int $id;
+    public int|null $id = null;
     public string $username;
     public string $email;
     public string $phone;
     public string $password;
     public $created_at;
     public $updated_at;
-
-    protected $conn;
-
-    public function __construct()
-    {
-        $this->conn = Database::getInstance();
-    }
 
     public static function tableName()
     {
@@ -47,7 +40,7 @@ class User
     public function update()
     {
         $sql = "UPDATE " . static::tableName() . " SET name = :username, email = :email, phone = :phone, password = :password WHERE id = :id;";
-        $state = $this->conn->prepare($sql);
+        $state = $this->db->prepare($sql);
         $result = $state->execute([
             ':username' => $this->username,
             ':phone' => $this->phone,
@@ -62,7 +55,7 @@ class User
     public function create(): bool
     {
         $sql = "INSERT INTO " . static::tableName() . "(name, email, phone, password) VALUES(:username, :email, :phone, :password)";
-        $state = $this->conn->prepare($sql);
+        $state = $this->db->prepare($sql);
         $result = $state->execute([
             ':username' => $this->username,
             ':phone' => $this->phone,
@@ -75,10 +68,10 @@ class User
 
     public static function findByEmailOrPhone($login)
     {
-        $conn = Database::getInstance();
+        $db = Database::getInstance();
     
         $sql = "SELECT id, password FROM " . static::tableName() . " WHERE email = ? OR phone = ?;";
-        $state = $conn->prepare($sql);
+        $state = $db->prepare($sql);
     
         $state->execute([$login, $login]);
     
@@ -90,10 +83,10 @@ class User
    
     public static function findById($id)
     {
-        $conn = Database::getInstance();
+        $db = Database::getInstance();
     
         $sql = "SELECT * FROM " . static::tableName() . " WHERE id = ?;";
-        $state = $conn->prepare($sql);
+        $state = $db->prepare($sql);
     
         $state->execute([$id]);
     

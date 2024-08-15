@@ -3,6 +3,7 @@
 namespace Kenpachi\TestWork\Controller;
 
 use Kenpachi\TestWork\Model\User;
+use Kenpachi\TestWork\Validator\RegisterValidator;
 
 class RegisterController extends BaseController
 {
@@ -16,16 +17,20 @@ class RegisterController extends BaseController
     public function store()
     {
         $request = $_POST;
-        $user = new User();
-        $user->username = $request['username'];
-        $user->email = $request['email'];
-        $user->phone = $request['phone'];
-        $user->setPassword($request['password']);
+        $validator = new RegisterValidator();
 
-        if ($user->save()) {
-            header('Location: /register');
+        if ($validator->validate($request)) {
+            $user = new User();
+            $user->username = $request['username'];
+            $user->email = $request['email'];
+            $user->phone = $request['phone'];
+            $user->setPassword($request['password']);
+
+            if ($user->save()) {
+                header('Location: /login');
+            }
         }
 
-        return $this->render('index');
+        return $this->render('index', ['errors' => $validator->errors, 'request' => $request]);
     }
 }

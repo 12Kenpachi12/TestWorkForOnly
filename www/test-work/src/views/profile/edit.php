@@ -16,15 +16,27 @@ $title = 'Редактирование профиля';
         <form id="registerForm" action="/profile" method="POST">
             <label for="email">Почта:</label>
             <input type="email" id="email" name="email" required value="<?= $user->email ?>">
-            <span class="error-message" id="emailError"></span>
+            <?php if (!empty($errors['email'])) { ?>
+                <?php foreach ($errors['email'] as $error) { ?>
+                 <span class="error-message" id="emailError"><?= $error ?></span>
+                <?php } ?>
+            <?php } ?>
 
             <label for="username">Логин:</label>
             <input type="text" id="username" name="username" required value="<?= $user->username ?>">
-            <span class="error-message" id="usernameError"></span>
+            <?php if (!empty($errors['username'])) { ?>
+                <?php foreach ($errors['username'] as $error) { ?>
+                 <span class="error-message" id="emailError"><?= $error ?></span>
+                <?php } ?>
+            <?php } ?>
 
             <label for="phone">Телефон:</label>
             <input type="tel" id="phone" name="phone" required value="<?= $user->phone ?>">
-            <span class="error-message" id="phoneError"></span>
+            <?php if (!empty($errors['phone'])) { ?>
+                <?php foreach ($errors['phone'] as $error) { ?>
+                 <span class="error-message" id="emailError"><?= $error ?></span>
+                <?php } ?>
+            <?php } ?>
 
             <button type="submit">Сохранить</button>
         </form>
