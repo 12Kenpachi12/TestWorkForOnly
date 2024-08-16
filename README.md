@@ -8,4 +8,4 @@
 
 5 ``` composer install --ignore-platform-reqs ```
 
-6 накатить миграцию из файла migrations на бд work
+6 Накатить миграцию из файла migrations на бд work
